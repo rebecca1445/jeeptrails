@@ -1,1 +1,38 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Trail 22 - Windrock",
+        "difficulty": "Hard",
+        "description": "Rocky technical trail with water crossings. Recommended: 35\" tires, lockers."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-84.3794, 36.0589],
+          [-84.3812, 36.0605],
+          [-84.3827, 36.0621]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Panther Creek",
+        "difficulty": "Moderate",
+        "description": "Winding wooded trail with occasional mud holes."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-84.3920, 36.0550],
+          [-84.3940, 36.0565],
+          [-84.3960, 36.0580]
+        ]
+      }
+    }
+  ]
+}
 

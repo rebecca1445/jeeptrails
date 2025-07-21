@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>Jeep Trails Map</title>
   <meta charset="utf-8" />
@@ -7,11 +7,20 @@
 
   <!-- Leaflet Styles -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <!-- Leaflet Search Styles -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.css" />
+
+  <!-- Stable Leaflet Search Styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-search/2.9.9/leaflet-search.min.css" />
 
   <style>
-    #map { height: 100vh; width: 100%; }
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    #map {
+      width: 100%;
+      height: 100vh;
+    }
   </style>
 </head>
 <body>
@@ -19,16 +28,20 @@
 
   <!-- Leaflet Scripts -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <!-- Leaflet Search Script -->
-  <script src="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.js"></script>
+
+  <!-- Stable Leaflet Search Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-search/2.9.9/leaflet-search.min.js"></script>
 
   <script>
+    // Initialize map
     const map = L.map('map').setView([36.06, -84.38], 14);
 
+    // Base tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
     }).addTo(map);
 
+    // Load and display GeoJSON data
     fetch('jeep-trails.geojson')
       .then(res => res.json())
       .then(data => {
@@ -46,13 +59,13 @@
           }
         }).addTo(map);
 
-        // Add search control
+        // Add Search Control
         new L.Control.Search({
           layer: trailLayer,
           propertyName: 'name',
           marker: false,
           moveToLocation: function(latlng, title, map) {
-            map.setView(latlng, 15); // Zoom in when found
+            map.setView(latlng, 15);
           }
         }).addTo(map);
       });

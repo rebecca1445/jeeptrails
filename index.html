@@ -13,32 +13,42 @@
 <body>
   <div id="map"></div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-search/2.9.9/leaflet-search.min.js"></script>
-  <script>
-    const map = L.map('map').setView([36.06, -84.38], 13);
+ <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-search/2.9.9/leaflet-search.min.js"></script>
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-    }).addTo(map);
+<script>
+  const map = L.map('map').setView([36.06, -84.38], 13);
 
-    fetch('jeep-trails.geojson')
-      .then(response => response.json())
-      .then(data => {
-        const trails = L.geoJSON(data, {
-          style: feature => ({ color: 'green', weight: 3 }),
-          onEachFeature: (feature, layer) => {
-            layer.bindPopup(`<strong>${feature.properties.name}</strong><br>${feature.properties.description}`);
-          }
-        }).addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+  }).addTo(map);
 
-        new L.Control.Search({
-          layer: trails,
-          propertyName: 'name',
-          marker: false
-        }).addTo(map);
-      });
-  </script>
-</body>
-</html>
+  fetch('jeep-trails.geojson')
+    .then(res => res.json())
+    .then(data => {
+      const trails = L.geoJSON(data, {
+        style: feature => ({
+          color: feature.properties.difficulty === "Hard" ? "red" : "green",
+          weight: 4
+        }),
+        onEachFeature: (feature, layer) => {
+          layer.bindPopup(`
+            <strong>${feature.properties.name}</strong><br>
+            Difficulty: ${feature.properties.difficulty}<br>
+            ${feature.properties.description}
+          `);
+        }
+      }).addTo(map);
+
+      // 🟢 Add the search bar
+      new L.Control.Search({
+        layer: trails,
+        propertyName: 'name',
+        marker: false,
+        moveToLocation: (latlng, title, map) => {
+          map.setView(latlng, 15);
+        }
+      }).addTo(map);
+    });
+</script>
 

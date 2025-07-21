@@ -1,1 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Jeep Trails Map</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet Styles -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Leaflet Search Styles -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.css" />
+
+  <style>
+    #map { height: 100vh; width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Leaflet Scripts -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Leaflet Search Script -->
+  <script src="https://unpkg.com/leaflet-control-search/dist/leaflet-search.min.js"></script>
+
+  <script>
+    const map = L.map('map').setView([36.06, -84.38], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    fetch('jeep-trails.geojson')
+      .then(res => res.json())
+      .then(data => {
+        const trailLayer = L.geoJSON(data, {
+          style: feature => ({
+            color: feature.properties.difficulty === "Hard" ? "red" : "green",
+            weight: 4
+          }),
+          onEachFeature: (feature, layer) => {
+            layer.bindPopup(`
+              <strong>${feature.properties.name}</strong><br>
+              Difficulty: ${feature.properties.difficulty}<br>
+              ${feature.properties.description}
+            `);
+          }
+        }).addTo(map);
+
+        // Add search control
+        new L.Control.Search({
+          layer: trailLayer,
+          propertyName: 'name',
+          marker: false,
+          moveToLocation: function(latlng, title, map) {
+            map.setView(latlng, 15); // Zoom in when found
+          }
+        }).addTo(map);
+      });
+  </script>
+</body>
+</html>
 

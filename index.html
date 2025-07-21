@@ -61,14 +61,15 @@
 
         // Add Search Control
         new L.Control.Search({
-          layer: trailLayer,
-          propertyName: 'name',
-          marker: false,
-          position: 'topright'
-          moveToLocation: function(latlng, title, map) {
-            map.setView(latlng, 15);
-          }
-        }).addTo(map);
+  layer: trails,
+  propertyName: 'name',
+  marker: false,
+  position: 'topright', // 👈 Move search bar to top-right
+  moveToLocation: (latlng, title, map) => {
+    map.setView(latlng, 15);
+  }
+}).addTo(map);
+
       });
   </script>
 </body>

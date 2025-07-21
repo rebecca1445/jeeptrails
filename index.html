@@ -43,34 +43,33 @@
 
     // Load and display GeoJSON data
     fetch('jeep-trails.geojson')
-      .then(res => res.json())
-      .then(data => {
-        const trailLayer = L.geoJSON(data, {
-          style: feature => ({
-            color: feature.properties.difficulty === "Hard" ? "red" : "green",
-            weight: 4
-          }),
-          onEachFeature: (feature, layer) => {
-            layer.bindPopup(`
-              <strong>${feature.properties.name}</strong><br>
-              Difficulty: ${feature.properties.difficulty}<br>
-              ${feature.properties.description}
-            `);
-          }
-        }).addTo(map);
+  .then(res => res.json())
+  .then(data => {
+    const trailLayer = L.geoJSON(data, {
+      style: feature => ({
+        color: feature.properties.difficulty === "Hard" ? "red" : "green",
+        weight: 4
+      }),
+      onEachFeature: (feature, layer) => {
+        layer.bindPopup(`
+          <strong>${feature.properties.name}</strong><br>
+          Difficulty: ${feature.properties.difficulty}<br>
+          ${feature.properties.description}
+        `);
+      }
+    }).addTo(map);
 
-        // Add Search Control
-        new L.Control.Search({
-  layer: trails,
-  propertyName: 'name',
-  marker: false,
-  position: 'topright', // 👈 Move search bar to top-right
-  moveToLocation: (latlng, title, map) => {
-    map.setView(latlng, 15);
-  }
-}).addTo(map);
-
-      });
+    // Add Search Control (now correct)
+    new L.Control.Search({
+      layer: trailLayer,
+      propertyName: 'name',
+      marker: false,
+      position: 'topright',
+      moveToLocation: (latlng, title, map) => {
+        map.setView(latlng, 15);
+      }
+    }).addTo(map);
+  });
   </script>
 </body>
 </html>
